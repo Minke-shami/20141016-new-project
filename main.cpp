@@ -31,25 +31,31 @@ int state[HEIGHT][WIDTH]={
     {1,1,1,1,1,1,1,1,1,1}
 };
 // 展示界面
-void show(int a[HEIGHT][WIDTH]){
-        clear(); // 清除屏幕
-        for (int x=0; x<10; ++x) {
-            for (int y=0; y<10; ++y) {
-                if (a[x][y]==1) {
-                    mvprintw(x, y * 2, "#"); // 墙 1
-                } else if (a[x][y]==3) {
-                    mvprintw(x, y * 2, "A"); //头 3
-                } else if (a[x][y]==2) {
-                    mvprintw(x, y * 2, "E"); // 身体 2
-                } else if (a[x][y]==0) {
-                    mvprintw(x, y * 2, " ");// 空格 0
-                } else if (a[x][y]==4) {
-                    mvprintw(x, y * 2, "*"); // 蛋 4
-                }
+void show(int a[HEIGHT][WIDTH]) {
+    clear();
+    for (int x = 0; x < HEIGHT; ++x) {
+        for (int y = 0; y < WIDTH; ++y) {
+            switch (a[x][y]) {
+                case 1:
+                    mvprintw(x, y * 2, "#");
+                    break;
+                case 3:
+                    mvprintw(x, y * 2, "A");
+                    break;
+                case 2:
+                    mvprintw(x, y * 2, "E");
+                    break;
+                case 0:
+                    mvprintw(x, y * 2, " ");
+                    break;
+                case 4:
+                    mvprintw(x, y * 2, "*");
+                    break;
             }
         }
-    refresh(); // 刷新屏幕以显示更改
     }
+    refresh();
+}
 // 随机数
 int suijishu(int a, int b){
     //random_device 是一个类，用于生成高质量的非确定性随机数种子，创造一个类的对象rd
@@ -390,9 +396,5 @@ int main() {
     }
 
    endwin();
-
-
- 
-
     return 0;
 }
