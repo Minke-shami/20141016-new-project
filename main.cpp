@@ -174,16 +174,19 @@ int moveSnake(vector<tou1>& snake, int directionX, int directionY, int key) {
         } else {
             clear();
             printw("\n Hit the wall!!! Game ending soon.\n");
+            refresh();
             jishi_time(3000);
             return 'q';
         }
     } else {
         clear();
         printw("\n Hit the wall!!! Game ending soon.\n");
+        refresh();
         jishi_time(3000);
         return 'q';
     }
     printw("Snake length: %ld\n", snake.size());
+    refresh();
     return getch();
 }
 
