@@ -16,7 +16,9 @@
 
 using namespace std;
 // 原始界面
-int state[10][10]={
+
+const int HEIGHT=10,WIDTH=10;
+int state[HEIGHT][WIDTH]={
     {1,1,1,1,1,1,1,1,1,1},
     {1,0,0,0,0,0,0,0,0,1},
     {1,0,0,0,0,0,0,0,0,1},
@@ -29,7 +31,7 @@ int state[10][10]={
     {1,1,1,1,1,1,1,1,1,1}
 };
 // 展示界面
-void show(int a[10][10]){
+void show(int a[HEIGHT][WIDTH]){
         clear(); // 清除屏幕
         for (int x=0; x<10; ++x) {
             for (int y=0; y<10; ++y) {
@@ -138,7 +140,7 @@ void jishi_time(int n){
 }
 
 
-
+/*
 // 移动 上
 int yidong_UP(vector<tou1> &se1, int a){
     long int t=0;
@@ -294,8 +296,48 @@ int yidong_right(vector<tou1> &se1, int a){
         a='q';
     }
     return a;
-}
+}  */
 
+
+int moveSnake(vector<tou1>& snake, int directionX, int directionY, int key) {
+    long int t = snake.size();
+    int new_x = snake[0].x + directionX;
+    int new_y = snake[0].y + directionY;
+
+    if (new_x >= 0 && new_x < HEIGHT && new_y >= 0 && new_y < WIDTH) {
+        if (state[new_x][new_y] == 0) {
+            for (long int i = t - 1; i > 0; --i) {
+                snake[i] = snake[i - 1];
+            }
+            snake[0].x = new_x;
+            snake[0].y = new_y;
+            show_se(snake);
+            show(state);
+            printw("\n 1 GO next step \n");
+        } else if (state[new_x][new_y] == 4) {
+            tou1 new_tou;
+            new_tou.x=new_x;
+            new_tou.y=new_y;
+            snake.insert(snake.begin(), new_tou);
+            show_se(snake);
+            dan();
+            show(state);
+            printw("\n 2 next step \n");
+        } else {
+            clear();
+            printw("\n Hit the wall!!! Game ending soon.\n");
+            jishi_time(3000);
+            return 'q';
+        }
+    } else {
+        clear();
+        printw("\n Hit the wall!!! Game ending soon.\n");
+        jishi_time(3000);
+        return 'q';
+    }
+    printw("Snake length: %ld\n", snake.size());
+    return getch();
+}
 
 
 
@@ -312,9 +354,9 @@ int main() {
     tou1 t0=t();
     int ch=97;
     // 生成蛇神的容器，记录每个位置的坐标
-    vector<tou1> se;
+    vector<tou1> snake;
     //生成蛇头
-    se.insert(se.begin(), t0);
+    snake.insert(snake.begin(), t0);
     
     // 展示界面
     show(state);
@@ -327,34 +369,25 @@ int main() {
     printw("\n Enjoy your weekend!");
     ch=getch();
     
-    while(ch!= 'q') {
-            
-            switch(ch) {
-                case KEY_UP:
-                {
-                    ch= yidong_UP(se, ch);
-                    break;
-                }
-                case KEY_DOWN:
-                {
-                    ch= yidong_down(se, ch);
-                    break;
-                }
-                case KEY_LEFT:
-                {
-                    ch= yidong_lift(se, ch);
-                    break;
-                }
-                case KEY_RIGHT:
-                {
-                    ch= yidong_right(se, ch);
-                    break;
-                }
-                default:
-                    break;
-            }
-            refresh();
+    while (ch != 'q') {
+        switch (ch) {
+            case KEY_UP:
+                ch = moveSnake(snake, -1, 0, ch);
+                break;
+            case KEY_DOWN:
+                ch = moveSnake(snake, 1, 0, ch);
+                break;
+            case KEY_LEFT:
+                ch = moveSnake(snake, 0, -1, ch);
+                break;
+            case KEY_RIGHT:
+                ch = moveSnake(snake, 0, 1, ch);
+                break;
+            default:
+                break;
         }
+        refresh();
+    }
 
    endwin();
 
